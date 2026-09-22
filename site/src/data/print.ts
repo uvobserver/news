@@ -1,33 +1,39 @@
-// In Print page content. Fill in the TK fields; the page and map update on the next build.
+// In Print page content. Edit here; the page and map update on the next build.
 
 export type DistributionBox = {
   /** Where the box is, as readers would say it (e.g. "Dan & Whit's"). */
   name: string;
-  address: string;
+  street: string;
   town: string;
-  lat: number;
-  lng: number;
+  state: 'VT' | 'NH';
+  zip: string;
+  /** Optional. When omitted, the build looks the address up on OpenStreetMap (see lib/geocode.ts). */
+  lat?: number;
+  lng?: number;
   note?: string;
 };
 
-/** Red UVO distribution boxes. Empty until locations are supplied; the map shows the Upper Valley meanwhile. */
-export const DISTRIBUTION_BOXES: DistributionBox[] = [];
+/** Red UVO distribution boxes. */
+export const DISTRIBUTION_BOXES: DistributionBox[] = [
+  { name: "Dan & Whit's", street: '319 Main Street', town: 'Norwich', state: 'VT', zip: '05055' },
+  { name: "Lucky's Coffee Garage", street: '1 North Park Street', town: 'Lebanon', state: 'NH', zip: '03766' },
+  { name: 'Standard Company Tattoo', street: '59 North Main Street', town: 'White River Junction', state: 'VT', zip: '05001' },
+];
 
 export type PrintEdition = {
   title: string;
   /** ISO date of the issue. */
   date: string;
-  /** Link to a PDF of the issue; leave undefined until one is published. */
+  /** Link to a PDF of the issue (files live in /public/print). */
   pdf?: string;
   /** Cover image under /public. */
   cover?: string;
   pages?: number;
 };
 
-// Known from the print Police Blotter items and the shop listing.
 export const PRINT_EDITIONS: PrintEdition[] = [
-  { title: 'UV Observer Print Edition', date: '2025-04-01', pages: 4, cover: '/assets/products/p3.webp' },
-  { title: 'UV Observer Print Edition', date: '2023-04-01' },
+  { title: 'UV Observer Print Edition', date: '2025-04-01', pages: 4, pdf: '/print/uv-observer-2025-04-01.pdf', cover: '/assets/print/cover-2025-04-01.jpg' },
+  { title: 'UV Observer Print Edition', date: '2023-04-01', pages: 4, pdf: '/print/uv-observer-2023-04-01.pdf', cover: '/assets/print/cover-2023-04-01.jpg' },
 ];
 
 /** Initial map view: the Upper Valley, centered between Lebanon, Hanover and White River Junction. */

@@ -287,9 +287,11 @@ button { font: inherit; color: inherit; }
 .boxitem__addr, .boxitem__note { font-family: var(--font-body); font-size: 13px; color: var(--ink-700); }
 .boxitem__note { font-style: italic; }
 .inprint__editions { margin-top: 44px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
-.editions { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 28px; width: 100%; }
+.editions { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 220px)); gap: 28px; width: 100%; }
 .edition { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
-.edition__cover { width: 100%; aspect-ratio: 3 / 4; background-size: contain; background-repeat: no-repeat; }
+.edition__coverlink { width: 100%; }
+.edition__coverlink:hover { opacity: 0.85; }
+.edition__cover { width: 100%; aspect-ratio: 846 / 1638; background-size: contain; background-repeat: no-repeat; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15); }
 .edition__title { font-family: var(--font-display); font-weight: 800; font-size: 15px; color: var(--text-headline); }
 .edition__meta { font-family: var(--font-display); font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
 .edition__btn { font-size: 12px; padding: 8px 14px; }

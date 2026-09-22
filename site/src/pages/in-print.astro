@@ -4,9 +4,11 @@ import { Headline, Kicker } from '../ds';
 import { Photo } from '../components/Photo';
 import { BoxMap } from '../components/islands/BoxMap';
 import { DISTRIBUTION_BOXES, PRINT_EDITIONS, UPPER_VALLEY_VIEW } from '../data/print';
+import { placeBoxes } from '../lib/geocode';
 import { formatDate } from '../data';
 import { url } from '../lib/urls';
 
+const pins = await placeBoxes(DISTRIBUTION_BOXES);
 const boxesByTown = Object.entries(
   DISTRIBUTION_BOXES.reduce<Record<string, typeof DISTRIBUTION_BOXES>>((acc, b) => ((acc[b.town] ??= []).push(b), acc), {}),
 ).sort(([a], [b]) => a.localeCompare(b));
@@ -21,7 +23,7 @@ const boxesByTown = Object.entries(
 
     <section class="inprint__boxes" aria-labelledby="boxes-heading">
       <div class="inprint__map">
-        <BoxMap client:visible boxes={DISTRIBUTION_BOXES} center={UPPER_VALLEY_VIEW} />
+        <BoxMap client:visible boxes={pins} center={UPPER_VALLEY_VIEW} />
       </div>
       <div class="inprint__list">
         <h2 id="boxes-heading" class="inprint__label">Red Box Locations</h2>
@@ -34,7 +36,7 @@ const boxesByTown = Object.entries(
               {boxes.map(b => (
                 <div class="boxitem">
                   <div class="boxitem__name">{b.name}</div>
-                  <div class="boxitem__addr">{b.address}</div>
+                  <div class="boxitem__addr">{b.street}, {b.town}, {b.state}</div>
                   {b.note && <div class="boxitem__note">{b.note}</div>}
                 </div>
               ))}
@@ -49,7 +51,9 @@ const boxesByTown = Object.entries(
       <div class="editions">
         {PRINT_EDITIONS.map(e => (
           <div class="edition">
-            <Photo className="edition__cover" src={e.cover} />
+            {e.pdf
+              ? <a class="plainlink edition__coverlink" href={e.pdf} target="_blank" rel="noopener" aria-label={`Read the ${formatDate(e.date)} edition (PDF)`}><Photo className="edition__cover" src={e.cover} /></a>
+              : <Photo className="edition__cover" src={e.cover} />}
             <div class="edition__title">{e.title}</div>
             <div class="edition__meta">{formatDate(e.date)}{e.pages ? ` · ${e.pages} pages` : ''}</div>
             {e.pdf

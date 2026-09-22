@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
 import 'leaflet/dist/leaflet.css';
-import type { DistributionBox } from '../../data/print';
+import type { PlacedBox } from '../../lib/geocode';
 
 /** OpenStreetMap of the red distribution boxes. Leaflet needs `window`, so it loads after mount. */
-export function BoxMap({ boxes, center }: { boxes: DistributionBox[]; center: { lat: number; lng: number; zoom: number } }) {
+export function BoxMap({ boxes, center }: { boxes: PlacedBox[]; center: { lat: number; lng: number; zoom: number } }) {
   const el = useRef<HTMLDivElement>(null);
   useEffect(() => {
     let map: import('leaflet').Map | undefined;
@@ -18,10 +18,10 @@ export function BoxMap({ boxes, center }: { boxes: DistributionBox[]; center: { 
       const icon = L.divIcon({ className: 'boxpin', html: '<span></span>', iconSize: [18, 22], iconAnchor: [9, 22], popupAnchor: [0, -20] });
       const markers = boxes.map(b =>
         L.marker([b.lat, b.lng], { icon, title: b.name })
-          .bindPopup(`<strong>${escape(b.name)}</strong><br>${escape(b.address)}, ${escape(b.town)}${b.note ? `<br><em>${escape(b.note)}</em>` : ''}`)
+          .bindPopup(`<strong>${escape(b.name)}</strong><br>${escape(b.street)}, ${escape(b.town)}, ${b.state}${b.note ? `<br><em>${escape(b.note)}</em>` : ''}`)
           .addTo(map!),
       );
-      if (markers.length > 1) map.fitBounds(L.featureGroup(markers).getBounds().pad(0.2));
+      if (markers.length > 1) map.fitBounds(L.featureGroup(markers).getBounds().pad(0.25));
     });
     return () => { cancelled = true; map?.remove(); };
   }, [boxes, center]);
