@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import { Headline, Kicker } from '../ds';
+import { ArchiveResults } from './islands/Archive';
+import { ARCHIVE, ARCHIVE_TAGS } from '../data';
+import { url } from '../lib/urls';
+
+interface Props { tag: string }
+const { tag } = Astro.props;
+const count = (t: string) => (t === 'All' ? ARCHIVE.length : ARCHIVE.filter(s => s.tag === t).length);
+---
+<Base title={tag === 'All' ? 'Archive' : `${tag} — Archive`} description={tag === 'All' ? 'Every story the Observer has published.' : `Every ${tag} story the Observer has published.`} section="archive" activeTag={tag}>
+  <div class="archive">
+    <div class="archive__head">
+      <div class="archive__title">
+        <Kicker>The Microfiche</Kicker>
+        <Headline level="xl" as="h1">Archive</Headline>
+      </div>
+      <div class="archive__intro">Every story the Observer has published, sorted</div>
+    </div>
+
+    <div class="archive__grid">
+      <nav class="rail" aria-label="Sections">
+        <div class="rail__label">Sections</div>
+        {ARCHIVE_TAGS.map(t => (
+          <a class={`rail__item${t === tag ? ' is-active' : ''}`} href={url.archive(t)} aria-current={t === tag ? 'page' : undefined}>
+            <span>{t}</span>
+            <span class="rail__count">{count(t)}</span>
+          </a>
+        ))}
+      </nav>
+      <ArchiveResults client:load tag={tag} />
+    </div>
+  </div>
+</Base>

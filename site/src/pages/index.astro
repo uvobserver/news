@@ -1,0 +1,166 @@
+---
+import Base from '../layouts/Base.astro';
+import { Headline, Kicker } from '../ds';
+import { Photo } from '../components/Photo';
+import { StoryText, FeatureCard, MaybeLink } from '../components/StoryBlocks';
+import { Carousel } from '../components/islands/Carousel';
+import { BlotterPanel, ForumPanel } from '../components/islands/Panels';
+import { OldLinkRedirect } from '../components/islands/OldLinkRedirect';
+import {
+  ARCHIVE, TAG_SLUGS, LEAD_STORY, RECENT_STORIES, RECYCLED, FEATURED_PRODUCTS, MOST_READ, TOPIC_COLUMNS,
+  IN_DEPTH, CITY_LONGFORM, CITY_BRIEFS, IN_FOCUS, IG_POSTS, OPINION,
+} from '../data';
+import { url } from '../lib/urls';
+
+const oldStoryLinks = Object.fromEntries(ARCHIVE.map(s => [s.id, url.story(s)]));
+const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].map(([t, slug]) => [t, `/archive/${slug}/`])]);
+---
+<Base section="home">
+  <OldLinkRedirect client:load stories={oldStoryLinks} tags={oldTagLinks} />
+  <div class="home">
+    {/* Above the fold: lead story | Recycled Content + Support */}
+    <a class="plainlink lead" href={url.story(LEAD_STORY)}>
+      <Photo className="lead__photo" src={LEAD_STORY.photo} />
+      <div class="lead__body">
+        <StoryText story={LEAD_STORY} level="xl" />
+      </div>
+    </a>
+
+    <div>
+      <a class="plainlink recycled" href={url.story(RECYCLED)}>
+        <div class="recycled__label"><span class="recycled__icon" aria-hidden="true">♻</span><span>Recycled Content</span></div>
+        <div class="recycled__title">{RECYCLED.title}</div>
+        <div class="meta">{RECYCLED.displayDate}</div>
+      </a>
+      <div>
+        <div class="modhead">
+          <Kicker color="secondary">Support UV Observer</Kicker>
+          <a class="moreLink" href={url.shop}>Visit Shop →</a>
+        </div>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:14px;">
+          {FEATURED_PRODUCTS.map(p => (
+            <a class="plainlink productRow" href={url.shop}>
+              <Photo className="productRow__photo" src={p.photo} />
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;">
+                <div class="productTitle">{p.title}</div>
+                <div class="productPrice">{p.price}</div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="fullrow divider"><div></div></div>
+
+    <div class="recent">
+      {RECENT_STORIES.map(s => (
+        <a class="plainlink recent__item" href={url.story(s)}>
+          <Photo src={s.photo} width="220px" ar={s.ar} />
+          <StoryText story={s} level="lg" />
+        </a>
+      ))}
+    </div>
+
+    <div class="sidecol">
+      <Kicker>Most Read</Kicker>
+      <div class="thumbList">
+        {MOST_READ.map(s => (
+          <a class="plainlink thumbRow" href={url.story(s)}>
+            <Photo src={s.photo} width="110px" ar={s.ar} />
+            <Headline level="md">{s.title}</Headline>
+          </a>
+        ))}
+      </div>
+      <div style="margin-top:32px;">
+        <Kicker>Follow @uvobserver</Kicker>
+        <div class="igGrid">
+          {IG_POSTS.slice(0, 3).map(p => (
+            <a href={p.link} target="_blank" rel="noopener" aria-label="Instagram post" style={`background-image:url("${p.image}")`}></a>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <Carousel client:visible title="In-Depth">
+      {IN_DEPTH.map(d => <FeatureCard item={d} />)}
+    </Carousel>
+
+    <div class="sidestack">
+      <BlotterPanel client:visible />
+      <ForumPanel client:visible />
+    </div>
+
+    <section class="infocus" aria-label={`In Focus: ${IN_FOCUS.topic}`}>
+      <div class="shell">
+        <div class="infocus__label">In Focus: {IN_FOCUS.topic}</div>
+        <div class="infocus__grid">
+          <div class="infocus__lead">
+            <Photo className="infocus__photo" src={IN_FOCUS.photo} />
+            <div class="infocus__text">
+              <h2 class="infocus__headline">{IN_FOCUS.headline}</h2>
+              <div class="infocus__dek">{IN_FOCUS.dek}</div>
+              <div class="infocus__date">{IN_FOCUS.date}</div>
+            </div>
+          </div>
+          <div class="infocus__related">
+            <div class="infocus__relatedLabel">Related Coverage</div>
+            <div class="infocus__list">
+              {IN_FOCUS.related.map(r => (
+                <div class="infocus__item">
+                  <Photo src={r.photo} width="96px" ar={r.ar} />
+                  <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;">
+                    <div class="infocus__itemTitle">{r.title}</div>
+                    <div class="infocus__itemDate">{r.date}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <Carousel client:visible title="City News">
+      {CITY_LONGFORM.map(d => <FeatureCard item={d} />)}
+      {CITY_BRIEFS.map(b => (
+        <MaybeLink className="brief" link={b.link}>
+          <div class="brief__label">News In Brief</div>
+          <Headline level="sm">{b.title}</Headline>
+          <div class="meta meta--sm">{b.date}</div>
+        </MaybeLink>
+      ))}
+    </Carousel>
+
+    <section class="opinion" aria-label="Opinion">
+      <Kicker>Opinion</Kicker>
+      {OPINION.map(o => (
+        <div class="opinion__item">
+          <div class="opinion__kicker">{o.kicker}</div>
+          <Headline level="sm">{o.title}</Headline>
+          <div class="opinion__byline">{o.byline}</div>
+          <div class="opinion__dek">{o.dek}</div>
+        </div>
+      ))}
+    </section>
+
+    <div class="topics">
+      {TOPIC_COLUMNS.map(c => (
+        <section aria-label={c.tag}>
+          <Kicker color={c.kickerColor}>{c.tag}</Kicker>
+          <div class="thumbList">
+            {c.items.map(s => (
+              <a class="plainlink thumbRow" href={url.story(s)}>
+                <Photo src={s.photo} width="92px" ar={s.ar} />
+                <div class="thumbRow__text">
+                  <Headline level="sm">{s.title}</Headline>
+                  <div class="meta meta--sm">{s.displayDate}</div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+</Base>

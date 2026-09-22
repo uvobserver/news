@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import { Headline } from '../ds';
+import { Photo } from '../components/Photo';
+import { PRODUCTS } from '../data';
+import { STORE_URL } from '../lib/links';
+---
+<Base title="Shop" description="Print issues, stickers, and other analog proof you read a satirical newspaper." section="shop">
+  <div class="simplepage">
+    <Headline level="xl" as="h1">Shop</Headline>
+    <div class="shop__intro">Print issues, stickers, and other analog proof you read a satirical newspaper. Fulfilled via Printful. Proceeds fund the next print run.</div>
+    <div class="shop__grid">
+      {PRODUCTS.map(p => (
+        <div class="shop__item">
+          <Photo className="shop__photo" src={p.photo} />
+          <div class="shop__title">{p.title}</div>
+          <div class="shop__desc">{p.desc}</div>
+          <div class="shop__buy">
+            <span class="shop__price">{p.price}</span>
+            <a class="ds-subscribe ds-subscribe--secondary" href={STORE_URL} target="_blank" rel="noopener">Add to Cart</a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Base>

@@ -1,5 +1,5 @@
 import { useRef, type ReactNode } from 'react';
-import { Kicker } from '../ds';
+import { Kicker } from '../../ds';
 
 /** Horizontally scrolling strip with a kicker and ←/→ controls. */
 export function Carousel({ title, step = 540, className = 'carousel', headClass = 'carousel__head', children }: {

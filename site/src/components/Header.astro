@@ -1,0 +1,28 @@
+---
+import { Rule } from '../ds';
+import { ArchivesMenu } from './islands/ArchivesMenu';
+import { Signup } from './islands/Signup';
+import { url, type NavSection } from '../lib/urls';
+import { INSTAGRAM_URL, SUBSTACK_URL } from '../lib/links';
+
+interface Props { section: NavSection; activeTag?: string }
+const { section, activeTag } = Astro.props;
+const chip = (on: boolean) => `navchip${on ? ' is-active' : ''}`;
+---
+<a class="masthead" href={url.home}>
+  <img src="/assets/logo-with-subhead.png" width="3471" height="723" alt="The UV Observer — Unreal Coverage of the Upper Valley, Published Occasionally" />
+</a>
+<Rule weight="thick" />
+<nav class="nav noprint" aria-label="Main">
+  <div class="nav__chips">
+    <a class={chip(section === 'home')} href={url.home} aria-current={section === 'home' ? 'page' : undefined}>Home</a>
+    <a class={chip(section === 'shop')} href={url.shop} aria-current={section === 'shop' ? 'page' : undefined}>Shop</a>
+    <a class={chip(section === 'about')} href={url.about} aria-current={section === 'about' ? 'page' : undefined}>About</a>
+    <ArchivesMenu client:idle active={section === 'archive'} activeTag={activeTag} />
+  </div>
+  <div class="nav__social">
+    <a href={INSTAGRAM_URL} target="_blank" rel="noopener">Instagram</a>
+    <a href={SUBSTACK_URL} target="_blank" rel="noopener">Substack</a>
+  </div>
+  <Signup client:idle />
+</nav>

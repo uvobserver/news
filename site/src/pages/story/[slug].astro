@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import { Headline, Kicker } from '../../ds';
+import { Photo } from '../../components/Photo';
+import { RelatedArticles } from '../../components/islands/RelatedArticles';
+import { PrintButton } from '../../components/islands/PrintButton';
+import { ARCHIVE, FEATURED_PRODUCTS } from '../../data';
+import type { Story } from '../../data/types';
+import { url } from '../../lib/urls';
+import { STORE_URL } from '../../lib/links';
+
+export function getStaticPaths() {
+  return ARCHIVE.map(story => ({ params: { slug: story.slug }, props: { story } }));
+}
+
+const { story } = Astro.props as { story: Story };
+const shareUrl = new URL(url.story(story), Astro.site).href;
+const description = `${story.tag} · ${story.displayDate}. Unreal Coverage of the Upper Valley.`;
+---
+<Base title={story.title} description={description} image={story.photo} section="story" ogType="article">
+  <Fragment slot="head">
+    <meta property="article:published_time" content={story.date} />
+    <meta property="article:section" content={story.tag} />
+  </Fragment>
+  <div class="storypage">
+    <a class="backlink noprint" href={url.home}>← Back to Front Page</a>
+    <div class="storygrid">
+      <article class="storymain">
+        <a class="plainlink" href={url.archive(story.tag)}><Kicker color={story.kickerColor}>{story.tag}</Kicker></a>
+        <Headline level="xl" as="h1">{story.title}</Headline>
+        <time class="meta" datetime={story.date}>{story.displayDate}</time>
+        <img class="storyimg" src={story.photo} alt={story.title} width={1100} height={Math.round(1100 / story.ar)} />
+        <div class="share noprint">
+          <span class="share__label">Share</span>
+          <span class="share__url">{shareUrl.replace(/^https?:\/\//, '')}</span>
+          <PrintButton client:visible />
+        </div>
+      </article>
+
+      <aside class="storyside noprint">
+        <Kicker>Support UV Observer</Kicker>
+        {FEATURED_PRODUCTS.map(p => (
+          <div class="storyside__product">
+            <Photo className="storyside__photo" src={p.photo} />
+            <div class="productTitle">{p.title}</div>
+            <div class="productPrice">{p.price}</div>
+            <a class="ds-subscribe ds-subscribe--secondary" href={STORE_URL} target="_blank" rel="noopener">Add To Cart</a>
+          </div>
+        ))}
+        <a class="sortbtn" href={url.shop} style="padding:6px 0 0;">Visit Shop →</a>
+      </aside>
+
+      <RelatedArticles client:visible id={story.id} tag={story.tag} />
+    </div>
+  </div>
+</Base>

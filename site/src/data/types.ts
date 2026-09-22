@@ -15,6 +15,8 @@ export type KickerColor = 'primary' | 'secondary';
 export type Story = RawStory & {
   kickerColor: KickerColor;
   displayDate: string;
+  /** URL segment for /story/<slug>/, from the headline; stable once published. */
+  slug: string;
 };
 
 /** Long-form piece shown in a homepage carousel. */

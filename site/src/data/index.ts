@@ -9,23 +9,50 @@ export function formatDate(iso: string): string {
   return new Date(iso + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
+/** Lowercase, ASCII, hyphenated; cut at a word boundary so very long headlines stay usable. */
+export function slugify(text: string, max = 80): string {
+  const s = text
+    .normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[’'"“”]/g, '')
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  if (s.length <= max) return s;
+  return s.slice(0, max).replace(/-[^-]*$/, '');
+}
+
+// Slugs are assigned oldest-first, so a repeated headline gets -2, -3… and adding
+// newer stories never changes an existing URL.
+const SLUGS = new Map<string, string>();
+{
+  const seen = new Map<string, number>();
+  for (const s of ARCHIVE_RAW) {
+    const base = slugify(s.title);
+    const n = (seen.get(base) ?? 0) + 1;
+    seen.set(base, n);
+    SLUGS.set(s.id, n === 1 ? base : `${base}-${n}`);
+  }
+}
+
 /** Every story, newest first. Kicker colors alternate by original catalog order. */
 export const ARCHIVE: Story[] = ARCHIVE_RAW
-  .map((s, i): Story => ({ ...s, kickerColor: i % 2 === 0 ? 'primary' : 'secondary', displayDate: formatDate(s.date) }))
+  .map((s, i): Story => ({ ...s, kickerColor: i % 2 === 0 ? 'primary' : 'secondary', displayDate: formatDate(s.date), slug: SLUGS.get(s.id)! }))
   .sort((a, b) => b.date.localeCompare(a.date));
 
 export const STORY_BY_ID = new Map(ARCHIVE.map(s => [s.id, s]));
 
 export const ARCHIVE_TAGS = ['All', ...Array.from(new Set(ARCHIVE.map(s => s.tag))).sort()];
+export const TAG_SLUGS = new Map(ARCHIVE_TAGS.filter(t => t !== 'All').map(t => [t, slugify(t)]));
 
 const HOME_STORIES = ARCHIVE.slice(0, 4);
 export const LEAD_STORY = HOME_STORIES[0];
 export const RECENT_STORIES = HOME_STORIES.slice(1, 4);
 
 const PRODUCT_PHOTOS: Record<string, string> = {
-  p1: 'assets/products/p1.webp',
-  p2: 'assets/products/p2.webp',
-  p3: 'assets/products/p3.webp',
+  p1: '/assets/products/p1.webp',
+  p2: '/assets/products/p2.webp',
+  p3: '/assets/products/p3.webp',
 };
 export const PRODUCTS: Product[] = PRODUCTS_RAW.map(p => ({ ...p, photo: PRODUCT_PHOTOS[p.slotId] }));
 export const FEATURED_PRODUCTS = PRODUCTS.slice(0, 2);

@@ -110,7 +110,9 @@ button { font: inherit; color: inherit; }
 
 /* ---------- Homepage ---------- */
 .home { display: grid; grid-template-columns: 2fr 1fr; column-gap: 48px; row-gap: 0; padding: 20px 0 32px; }
-.home > * { min-width: 0; }
+.home > *, .home > astro-island > * { min-width: 0; }
+/* Islands render inside <astro-island> (display: contents); size the real grid items. */
+.carousel, .related { min-width: 0; }
 .fullrow { grid-column: 1 / -1; }
 
 .lead { display: flex; gap: 24px; align-items: flex-start; }
