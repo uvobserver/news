@@ -40,7 +40,7 @@ export const IN_FOCUS = {
   headline: ${JSON.stringify(infocus[2])},
   dek: ${JSON.stringify(infocus[3])},
   date: ${JSON.stringify(infocus[4])},
-  photo: '/assets/infocus-lead.webp',
+  photo: 'assets/infocus-lead.webp',
   related: ${lit.IN_FOCUS_RELATED} as RelatedItem[],
 };
 
@@ -53,6 +53,6 @@ export const BLOTTER: BlotterItem[] = ${lit.BLOTTER};
 export const FORUM: ForumLetter[] = ${lit.FORUM};
 
 export const OPINION: OpinionPiece[] = ${lit.OPINION};
-`.replace(/'assets\//g, "'/assets/");
+`;
 fs.writeFileSync(new URL('../src/data/content.ts', import.meta.url), out);
 console.log('wrote src/data/content.ts', out.length, 'bytes');

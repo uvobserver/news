@@ -2,7 +2,7 @@
    Values are carried over 1:1 from project/UV Observer Website.dc.html. */
 
 html { overflow-x: clip; }
-body { margin: 0; background: var(--surface-page); }
+body { margin: 0; background: var(--surface-page); font-size: 16px; }
 a { color: var(--link-color); text-decoration: none; }
 a:hover { color: var(--link-hover); text-decoration: underline; }
 button { font: inherit; color: inherit; }

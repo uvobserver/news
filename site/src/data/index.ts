@@ -23,9 +23,9 @@ export const LEAD_STORY = HOME_STORIES[0];
 export const RECENT_STORIES = HOME_STORIES.slice(1, 4);
 
 const PRODUCT_PHOTOS: Record<string, string> = {
-  p1: '/assets/products/p1.webp',
-  p2: '/assets/products/p2.webp',
-  p3: '/assets/products/p3.webp',
+  p1: 'assets/products/p1.webp',
+  p2: 'assets/products/p2.webp',
+  p3: 'assets/products/p3.webp',
 };
 export const PRODUCTS: Product[] = PRODUCTS_RAW.map(p => ({ ...p, photo: PRODUCT_PHOTOS[p.slotId] }));
 export const FEATURED_PRODUCTS = PRODUCTS.slice(0, 2);

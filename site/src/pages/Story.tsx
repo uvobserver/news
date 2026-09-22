@@ -5,7 +5,7 @@ import { Headline, Kicker } from '../ds';
 import { Carousel } from '../components/Carousel';
 import { Photo } from '../components/Photo';
 import { href } from '../lib/router';
-import { STORE_URL } from '../lib/links';
+import { PREVIEW_MODE, STORE_URL } from '../lib/links';
 
 // Random picks are cached per story so they stay put while reading but differ story to story.
 const relatedCache = new Map<string, StoryT[]>();
@@ -33,7 +33,7 @@ export function Story({ story }: { story: StoryT }) {
           <div className="share noprint">
             <span className="share__label">Share</span>
             <span className="share__url">{shareUrl}</span>
-            <button type="button" className="sortbtn outlinebtn" onClick={() => window.print()}>Print This Story</button>
+            {!PREVIEW_MODE && <button type="button" className="sortbtn outlinebtn" onClick={() => window.print()}>Print This Story</button>}
           </div>
         </article>
 

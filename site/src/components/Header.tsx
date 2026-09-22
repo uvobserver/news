@@ -2,13 +2,13 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { ARCHIVE_TAGS } from '../data';
 import { Rule } from '../ds';
 import { href, type Route } from '../lib/router';
-import { INSTAGRAM_URL, SUBSTACK_SUBSCRIBE_ACTION, SUBSTACK_URL } from '../lib/links';
+import { INSTAGRAM_URL, PREVIEW_MODE, SUBSTACK_SUBSCRIBE_ACTION, SUBSTACK_URL } from '../lib/links';
 
 export function Header({ route, activeTag }: { route: Route; activeTag: string }) {
   return (
     <>
       <a className="masthead" href={href.home}>
-        <img src="/assets/logo-with-subhead.png" alt="The UV Observer — Unreal Coverage of the Upper Valley, Published Occasionally" />
+        <img src="assets/logo-with-subhead.png" alt="The UV Observer — Unreal Coverage of the Upper Valley, Published Occasionally" />
       </a>
       <Rule weight="thick" />
       <nav className="nav noprint" aria-label="Main">
@@ -59,8 +59,11 @@ function ArchivesMenu({ active, activeTag }: { active: boolean; activeTag: strin
 /** Email field + Subscribe, submitted to Substack in a new tab. */
 function Signup() {
   const [done, setDone] = useState(false);
-  if (done) return <div className="nav__signup"><span className="signup__done">You're on the list.</span></div>;
+  if (done) {
+    return <div className="nav__signup"><span className="signup__done">{PREVIEW_MODE ? 'Preview only: signup is live on the real site.' : "You're on the list."}</span></div>;
+  }
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    if (PREVIEW_MODE) { e.preventDefault(); setDone(true); return; }
     if (!e.currentTarget.checkValidity()) return;
     // Let the native POST go to the new tab, then swap in the confirmation.
     setTimeout(() => setDone(true), 0);
