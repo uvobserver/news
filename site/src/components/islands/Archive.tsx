@@ -37,15 +37,12 @@ export function ArchiveResults({ tag }: { tag: string }) {
         <span className="results__count">{stories.length} {stories.length === 1 ? 'story' : 'stories'}</span>
       </div>
 
-      {/* Headline is printed on each image, so cards show only section and date. */}
+      {/* Headline is printed on each image, so cards show only the section. */}
       <div className="results">
         {stories.map(s => (
           <a key={s.id} className="plainlink storylink" href={url.story(s)}>
             <img className="archiveCard__img" src={s.photo} alt={s.title} loading="lazy" decoding="async" width={600} height={Math.round(600 / s.ar)} />
-            <div className="archiveCard__meta">
-              <Kicker color={s.kickerColor}>{s.tag}</Kicker>
-              <div className="meta meta--sm">{s.displayDate}</div>
-            </div>
+            <Kicker color={s.kickerColor}>{s.tag}</Kicker>
           </a>
         ))}
       </div>

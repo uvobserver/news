@@ -18,7 +18,6 @@ export function RelatedArticles({ id, tag }: { id: string; tag: string }) {
         <a key={s.id} className="plainlink storylink" href={url.story(s)}>
           <Photo className="card__photo" src={s.photo} ar={s.ar} />
           <Headline level="sm">{s.title}</Headline>
-          <div className="meta meta--sm" style={{ letterSpacing: '0.05em' }}>{s.displayDate}</div>
         </a>
       ))}
     </Carousel>

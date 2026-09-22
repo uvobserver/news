@@ -10,7 +10,6 @@ export function StoryText({ story, level }: { story: Story; level: 'xl' | 'lg' }
       <Kicker color={story.kickerColor}>{story.tag}</Kicker>
       <Headline level={level} as={level === 'xl' ? 'h1' : 'h2'}>{story.title}</Headline>
       {story.dek && <div className="dek">{story.dek}</div>}
-      <div className="meta">{story.displayDate}</div>
     </div>
   );
 }

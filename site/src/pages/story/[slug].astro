@@ -15,7 +15,7 @@ export function getStaticPaths() {
 
 const { story } = Astro.props as { story: Story };
 const shareUrl = new URL(url.story(story), Astro.site).href;
-const description = `${story.tag} · ${story.displayDate}. Unreal Coverage of the Upper Valley.`;
+const description = `${story.tag}. Unreal Coverage of the Upper Valley.`;
 ---
 <Base title={story.title} description={description} image={story.photo} section="story" ogType="article">
   <Fragment slot="head">
@@ -28,7 +28,6 @@ const description = `${story.tag} · ${story.displayDate}. Unreal Coverage of th
       <article class="storymain">
         <a class="plainlink" href={url.archive(story.tag)}><Kicker color={story.kickerColor}>{story.tag}</Kicker></a>
         <Headline level="xl" as="h1">{story.title}</Headline>
-        <time class="meta" datetime={story.date}>{story.displayDate}</time>
         <img class="storyimg" src={story.photo} alt={story.title} width={1100} height={Math.round(1100 / story.ar)} />
         <div class="share noprint">
           <span class="share__label">Share</span>

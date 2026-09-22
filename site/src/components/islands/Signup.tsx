@@ -1,11 +1,11 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type SubmitEvent } from 'react';
 import { SUBSTACK_SUBSCRIBE_ACTION } from '../../lib/links';
 
 /** Email field + Subscribe, submitted to Substack in a new tab. */
 export function Signup() {
   const [done, setDone] = useState(false);
   if (done) return <div className="nav__signup"><span className="signup__done">You're on the list.</span></div>;
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     if (!e.currentTarget.checkValidity()) return;
     // Let the native POST go to the new tab, then swap in the confirmation.
     setTimeout(() => setDone(true), 0);

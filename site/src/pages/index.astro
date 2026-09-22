@@ -27,11 +27,6 @@ const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].
     </a>
 
     <div>
-      <a class="plainlink recycled" href={url.story(RECYCLED)}>
-        <div class="recycled__label"><span class="recycled__icon" aria-hidden="true">♻</span><span>Recycled Content</span></div>
-        <div class="recycled__title">{RECYCLED.title}</div>
-        <div class="meta">{RECYCLED.displayDate}</div>
-      </a>
       <div>
         <div class="modhead">
           <Kicker color="secondary">Support UV Observer</Kicker>
@@ -49,6 +44,15 @@ const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].
           ))}
         </div>
       </div>
+      <a class="plainlink panel panel--recycled" href={url.story(RECYCLED)}>
+        <div class="panel__head">
+          <span class="panel__label"><span class="recycled__icon" aria-hidden="true">♻</span> Recycled Content</span>
+        </div>
+        <div class="panel__body">
+          <div class="recycled__tag">{RECYCLED.tag}</div>
+          <div class="recycled__title">{RECYCLED.title}</div>
+        </div>
+      </a>
     </div>
 
     <div class="fullrow divider"><div></div></div>
@@ -100,7 +104,6 @@ const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].
             <div class="infocus__text">
               <h2 class="infocus__headline">{IN_FOCUS.headline}</h2>
               <div class="infocus__dek">{IN_FOCUS.dek}</div>
-              <div class="infocus__date">{IN_FOCUS.date}</div>
             </div>
           </div>
           <div class="infocus__related">
@@ -111,7 +114,6 @@ const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].
                   <Photo src={r.photo} width="96px" ar={r.ar} />
                   <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;">
                     <div class="infocus__itemTitle">{r.title}</div>
-                    <div class="infocus__itemDate">{r.date}</div>
                   </div>
                 </div>
               ))}
@@ -127,7 +129,6 @@ const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].
         <MaybeLink className="brief" link={b.link}>
           <div class="brief__label">News In Brief</div>
           <Headline level="sm">{b.title}</Headline>
-          <div class="meta meta--sm">{b.date}</div>
         </MaybeLink>
       ))}
     </Carousel>
@@ -154,7 +155,6 @@ const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].
                 <Photo src={s.photo} width="92px" ar={s.ar} />
                 <div class="thumbRow__text">
                   <Headline level="sm">{s.title}</Headline>
-                  <div class="meta meta--sm">{s.displayDate}</div>
                 </div>
               </a>
             ))}
