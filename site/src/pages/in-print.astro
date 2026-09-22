@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import { Headline, Kicker } from '../ds';
+import { Photo } from '../components/Photo';
+import { BoxMap } from '../components/islands/BoxMap';
+import { DISTRIBUTION_BOXES, PRINT_EDITIONS, UPPER_VALLEY_VIEW } from '../data/print';
+import { formatDate } from '../data';
+import { url } from '../lib/urls';
+
+const boxesByTown = Object.entries(
+  DISTRIBUTION_BOXES.reduce<Record<string, typeof DISTRIBUTION_BOXES>>((acc, b) => ((acc[b.town] ??= []).push(b), acc), {}),
+).sort(([a], [b]) => a.localeCompare(b));
+---
+<Base title="In Print" description="Where to find the red UV Observer boxes, and every past print edition." section="in-print">
+  <div class="simplepage inprint">
+    <div class="inprint__head">
+      <Kicker>The Print Edition</Kicker>
+      <Headline level="xl" as="h1">In Print</Headline>
+      <p class="inprint__intro">TK</p>
+    </div>
+
+    <section class="inprint__boxes" aria-labelledby="boxes-heading">
+      <div class="inprint__map">
+        <BoxMap client:visible boxes={DISTRIBUTION_BOXES} center={UPPER_VALLEY_VIEW} />
+      </div>
+      <div class="inprint__list">
+        <h2 id="boxes-heading" class="inprint__label">Red Box Locations</h2>
+        {DISTRIBUTION_BOXES.length === 0 ? (
+          <p class="inprint__tk">TK</p>
+        ) : (
+          boxesByTown.map(([town, boxes]) => (
+            <div class="boxtown">
+              <div class="boxtown__name">{town}</div>
+              {boxes.map(b => (
+                <div class="boxitem">
+                  <div class="boxitem__name">{b.name}</div>
+                  <div class="boxitem__addr">{b.address}</div>
+                  {b.note && <div class="boxitem__note">{b.note}</div>}
+                </div>
+              ))}
+            </div>
+          ))
+        )}
+      </div>
+    </section>
+
+    <section class="inprint__editions" aria-labelledby="editions-heading">
+      <h2 id="editions-heading" class="inprint__label">Past Print Editions</h2>
+      <div class="editions">
+        {PRINT_EDITIONS.map(e => (
+          <div class="edition">
+            <Photo className="edition__cover" src={e.cover} />
+            <div class="edition__title">{e.title}</div>
+            <div class="edition__meta">{formatDate(e.date)}{e.pages ? ` · ${e.pages} pages` : ''}</div>
+            {e.pdf
+              ? <a class="ds-subscribe ds-subscribe--secondary edition__btn" href={e.pdf} target="_blank" rel="noopener">Read the PDF</a>
+              : <span class="edition__tk">PDF: TK</span>}
+          </div>
+        ))}
+      </div>
+      <a class="moreLink" href={url.shop}>Buy a print copy in the Shop →</a>
+    </section>
+  </div>
+</Base>

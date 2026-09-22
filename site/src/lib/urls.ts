@@ -8,6 +8,7 @@ export const url = {
   archive: (tag?: string) => (!tag || tag === 'All' ? '/archive/' : `/archive/${TAG_SLUGS.get(tag)}/`),
   shop: '/shop/',
   about: '/about/',
+  inPrint: '/in-print/',
 };
 
-export type NavSection = 'home' | 'shop' | 'about' | 'archive' | 'story';
+export type NavSection = 'home' | 'shop' | 'about' | 'archive' | 'story' | 'in-print';

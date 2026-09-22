@@ -23,6 +23,7 @@ const chip = (on: boolean) => `navchip${on ? ' is-active' : ''}`;
   <div class="nav__social">
     <a href={INSTAGRAM_URL} target="_blank" rel="noopener">Instagram</a>
     <a href={SUBSTACK_URL} target="_blank" rel="noopener">Substack</a>
+    <a href={url.inPrint} class={section === 'in-print' ? 'is-active' : undefined} aria-current={section === 'in-print' ? 'page' : undefined}>In Print</a>
   </div>
   <Signup client:idle />
 </nav>
