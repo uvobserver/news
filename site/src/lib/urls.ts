@@ -7,6 +7,7 @@ export const url = {
   story: (s: { slug: string }) => `/story/${s.slug}/`,
   archive: (tag?: string) => (!tag || tag === 'All' ? '/archive/' : `/archive/${TAG_SLUGS.get(tag)}/`),
   shop: '/shop/',
+  product: (handle: string) => `/shop/${handle}/`,
   about: '/about/',
   inPrint: '/in-print/',
 };

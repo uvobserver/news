@@ -299,6 +299,27 @@ button { font: inherit; color: inherit; }
 .cartpanel__checkout { text-align: center; }
 .cartpanel__checkout[aria-disabled="true"] { opacity: 0.6; pointer-events: none; }
 
+/* ---------- Product page ---------- */
+.shop__link { display: flex; flex-direction: column; gap: 10px; }
+.shop__link:hover .shop__title, .storyside__link:hover .productTitle { color: var(--brand-secondary); }
+.storyside__link { display: flex; flex-direction: column; gap: 8px; }
+.pdp { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 40px; align-items: start; margin-top: 8px; }
+.pdp__gallery { display: flex; flex-direction: column; gap: 10px; }
+.pdp__main { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; display: block; background: var(--surface-sunken); }
+.pdp__thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 8px; }
+.pdp__thumb { padding: 0; border: 2px solid transparent; background: none; cursor: pointer; }
+.pdp__thumb img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; display: block; }
+.pdp__thumb.is-active { border-color: var(--brand-primary); }
+.pdp__thumb:focus-visible { outline: 2px solid var(--brand-secondary); outline-offset: 2px; }
+.pdp__info { display: flex; flex-direction: column; gap: 16px; }
+.product__head { display: flex; flex-direction: column; gap: 6px; }
+.pdp__price { font-family: var(--font-display); font-weight: 800; font-size: 22px; color: var(--text-headline); }
+.pdp__buy { max-width: 320px; }
+.product__desc { font-family: var(--font-body); font-size: var(--text-body); line-height: var(--leading-body); color: var(--ink-700); max-width: 60ch; }
+.product__desc p { margin: 0 0 12px; }
+.product__desc ul { padding-left: 20px; margin: 0 0 12px; }
+.product__desc img { max-width: 100%; height: auto; }
+
 /* ---------- In Print ---------- */
 .nav__social a.is-active { text-decoration: underline; text-underline-offset: 3px; }
 .inprint__head { display: flex; flex-direction: column; gap: 4px; }
@@ -358,7 +379,7 @@ button { font: inherit; color: inherit; }
   .nav__chips, .nav__social, .nav__right, .nav__signup { justify-self: center; flex-wrap: wrap; justify-content: center; }
   .home, .storygrid, .archive__grid, .infocus__grid { grid-template-columns: minmax(0, 1fr); }
   .infocus__related { border-left: none; padding-left: 0; border-top: 1px solid rgba(255, 255, 255, 0.35); padding-top: 16px; margin-top: 20px; }
-  .topics, .shop__grid, .inprint__boxes, .inprint__host { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .topics, .shop__grid, .inprint__boxes, .inprint__host, .pdp { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .hostform { height: 1000px; }
   .boxmap { height: 340px; }
   .boxphotos { grid-template-columns: repeat(2, minmax(0, 1fr)); }

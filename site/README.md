@@ -42,8 +42,12 @@ forwarded to the new paths. Every page has a title, description, canonical URL a
 - Products load from Shopify's Storefront API at build time (`src/data/shop.ts`); the cart runs in the
   browser against the same API (`src/lib/cart.ts`) and hands off to Shopify checkout. Store domain and the
   public Storefront token are in `src/lib/shopify.ts`.
-- Products must be published to the **Headless** sales channel. A Shopify collection with the handle
-  `featured` picks the two items in the Support UV Observer boxes; otherwise the two best sellers show.
+- Products must be published to the **Headless** sales channel. Each product gets a page at
+  `/shop/<handle>/` with every Shopify image, the formatted description, its SEO title/description and
+  schema.org Product data.
+- Ordering, set with manual collections in Shopify (matched by URL handle, published to Headless):
+  `shop` orders the Shop page (products not in it follow, newest first); `featured` picks the Support UV
+  Observer items (otherwise the first two on the Shop page).
 - If Shopify can't be reached at build time, the site falls back to the prototype's product list with links
   to the old store. The build log says which it used (`[shop] Loaded N products from Shopify.`).
 - Product changes appear on the next build. To rebuild on every change, add a Cloudflare Pages deploy hook and

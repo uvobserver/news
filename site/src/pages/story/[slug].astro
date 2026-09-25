@@ -15,7 +15,7 @@ export function getStaticPaths() {
 }
 
 const { story } = Astro.props as { story: Story };
-const { featured } = await loadShop();
+const { featured, live: shopLive } = await loadShop();
 const shareUrl = new URL(url.story(story), Astro.site).href;
 const description = `${story.tag}. Unreal Coverage of the Upper Valley.`;
 ---
@@ -42,8 +42,10 @@ const description = `${story.tag}. Unreal Coverage of the Upper Valley.`;
         <Kicker>Support UV Observer</Kicker>
         {featured.map(p => (
           <div class="storyside__product">
-            <Photo className="storyside__photo" src={p.photo} />
-            <div class="productTitle">{p.title}</div>
+            <a class="plainlink storyside__link" href={shopLive ? url.product(p.handle) : `${url.shop}#${p.handle}`}>
+              <Photo className="storyside__photo" src={p.photo} />
+              <div class="productTitle">{p.title}</div>
+            </a>
             <div class="productPrice">{p.price}</div>
             <AddToCart client:visible variants={p.variants} label="Add To Cart" block idPrefix={`side-${p.handle}`} />
           </div>

@@ -13,7 +13,7 @@ import {
 import { url } from '../lib/urls';
 import { loadShop } from '../data/shop';
 
-const { featured } = await loadShop();
+const { featured, live: shopLive } = await loadShop();
 const oldStoryLinks = Object.fromEntries(ARCHIVE.map(s => [s.id, url.story(s)]));
 const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].map(([t, slug]) => [t, `/archive/${slug}/`])]);
 ---
@@ -36,7 +36,7 @@ const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].
         </div>
         <div style="margin-top:12px;display:flex;flex-direction:column;gap:14px;">
           {featured.map(p => (
-            <a class="plainlink productRow" href={`${url.shop}#${p.handle}`}>
+            <a class="plainlink productRow" href={shopLive ? url.product(p.handle) : `${url.shop}#${p.handle}`}>
               <Photo className="productRow__photo" src={p.photo} />
               <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;">
                 <div class="productTitle">{p.title}</div>

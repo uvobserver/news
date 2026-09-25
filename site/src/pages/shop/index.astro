@@ -1,11 +1,12 @@
 ---
-import Base from '../layouts/Base.astro';
-import { Headline } from '../ds';
-import { Photo } from '../components/Photo';
-import { AddToCart } from '../components/islands/AddToCart';
-import { loadShop } from '../data/shop';
+import Base from '../../layouts/Base.astro';
+import { Headline } from '../../ds';
+import { Photo } from '../../components/Photo';
+import { AddToCart } from '../../components/islands/AddToCart';
+import { loadShop } from '../../data/shop';
+import { url } from '../../lib/urls';
 
-const { products } = await loadShop();
+const { products, live } = await loadShop();
 ---
 <Base title="Shop" description="Print issues, stickers, and other analog proof you read a satirical newspaper." section="shop">
   <div class="simplepage">
@@ -14,8 +15,17 @@ const { products } = await loadShop();
     <div class="shop__grid">
       {products.map(p => (
         <div class="shop__item" id={p.handle}>
-          <Photo className="shop__photo" src={p.photo} />
-          <div class="shop__title">{p.title}</div>
+          {live ? (
+            <a class="plainlink shop__link" href={url.product(p.handle)}>
+              <Photo className="shop__photo" src={p.photo} />
+              <div class="shop__title">{p.title}</div>
+            </a>
+          ) : (
+            <>
+              <Photo className="shop__photo" src={p.photo} />
+              <div class="shop__title">{p.title}</div>
+            </>
+          )}
           <div class="shop__desc">{p.description}</div>
           <div class="shop__buy">
             <span class="shop__price">{p.price}</span>
