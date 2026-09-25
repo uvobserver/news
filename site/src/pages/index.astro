@@ -8,10 +8,11 @@ import { BlotterPanel, ForumPanel } from '../components/islands/Panels';
 import { OldLinkRedirect } from '../components/islands/OldLinkRedirect';
 import {
   ARCHIVE, TAG_SLUGS, LEAD_STORY, RECENT_STORIES, RECYCLED, MOST_READ, TOPIC_COLUMNS,
-  IN_DEPTH, CITY_LONGFORM, CITY_BRIEFS, IN_FOCUS, IG_POSTS, OPINION,
+  IN_DEPTH, CITY_LONGFORM, CITY_BRIEFS, IN_FOCUS, IG_POSTS,
 } from '../data';
 import { url } from '../lib/urls';
 import { loadShop } from '../data/shop';
+import { OPINION_PIECES } from '../data/opinion';
 
 const { featured, live: shopLive } = await loadShop();
 const oldStoryLinks = Object.fromEntries(ARCHIVE.map(s => [s.id, url.story(s)]));
@@ -137,13 +138,14 @@ const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].
 
     <section class="opinion" aria-label="Opinion">
       <Kicker>Opinion</Kicker>
-      {OPINION.map(o => (
-        <div class="opinion__item">
+      {OPINION_PIECES.map(o => (
+        <a class="plainlink opinion__item" href={url.opinion(o.slug)}>
           <div class="opinion__kicker">{o.kicker}</div>
           <Headline level="sm">{o.title}</Headline>
           <div class="opinion__byline">{o.byline}</div>
           <div class="opinion__dek">{o.dek}</div>
-        </div>
+          <span class="opinion__more">Read the column →</span>
+        </a>
       ))}
     </section>
 

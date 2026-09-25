@@ -8,6 +8,7 @@ export const url = {
   archive: (tag?: string) => (!tag || tag === 'All' ? '/archive/' : `/archive/${TAG_SLUGS.get(tag)}/`),
   shop: '/shop/',
   product: (handle: string) => `/shop/${handle}/`,
+  opinion: (slug: string) => `/opinion/${slug}/`,
   about: '/about/',
   inPrint: '/in-print/',
 };

@@ -1,12 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { Headline, Kicker } from '../../ds';
-import { Photo } from '../../components/Photo';
 import { RelatedArticles } from '../../components/islands/RelatedArticles';
 import { PrintButton } from '../../components/islands/PrintButton';
 import { ARCHIVE } from '../../data';
-import { loadShop } from '../../data/shop';
-import { AddToCart } from '../../components/islands/AddToCart';
+import StoreSidebar from '../../components/StoreSidebar.astro';
 import type { Story } from '../../data/types';
 import { url } from '../../lib/urls';
 
@@ -15,7 +13,6 @@ export function getStaticPaths() {
 }
 
 const { story } = Astro.props as { story: Story };
-const { featured, live: shopLive } = await loadShop();
 const shareUrl = new URL(url.story(story), Astro.site).href;
 const description = `${story.tag}. Unreal Coverage of the Upper Valley.`;
 ---
@@ -38,20 +35,7 @@ const description = `${story.tag}. Unreal Coverage of the Upper Valley.`;
         </div>
       </article>
 
-      <aside class="storyside noprint">
-        <Kicker>Support UV Observer</Kicker>
-        {featured.map(p => (
-          <div class="storyside__product">
-            <a class="plainlink storyside__link" href={shopLive ? url.product(p.handle) : `${url.shop}#${p.handle}`}>
-              <Photo className="storyside__photo" src={p.photo} />
-              <div class="productTitle">{p.title}</div>
-            </a>
-            <div class="productPrice">{p.price}</div>
-            <AddToCart client:visible variants={p.variants} label="Add To Cart" block idPrefix={`side-${p.handle}`} />
-          </div>
-        ))}
-        <a class="sortbtn" href={url.shop} style="padding:6px 0 0;">Visit Shop →</a>
-      </aside>
+      <StoreSidebar />
 
       <RelatedArticles client:visible id={story.id} tag={story.tag} />
     </div>
