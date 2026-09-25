@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import { Headline, Kicker } from '../ds';
 import { Photo } from '../components/Photo';
 import { BoxMap } from '../components/islands/BoxMap';
-import { DISTRIBUTION_BOXES, PRINT_EDITIONS, UPPER_VALLEY_VIEW } from '../data/print';
+import { BOX_PHOTOS, DISTRIBUTION_BOXES, PRINT_EDITIONS, UPPER_VALLEY_VIEW } from '../data/print';
 import { placeBoxes } from '../lib/geocode';
 import { formatDate } from '../data';
 import { url } from '../lib/urls';
@@ -22,6 +22,15 @@ const boxesByTown = Object.entries(
       <Kicker>The Print Edition</Kicker>
       <Headline level="xl" as="h1">In Print</Headline>
       <p class="inprint__intro">Periodic print editions of this peculiar periodical are distributed for free by Newsies to select Upper Valley locations. <a href="#host">Fill out this form</a> for the next delivery.</p>
+    </div>
+
+    <div class="boxphotos">
+      {BOX_PHOTOS.map(p => (
+        <figure class="boxphoto">
+          <img src={p.src} alt={p.alt} loading="lazy" decoding="async" />
+          <figcaption>{p.caption}</figcaption>
+        </figure>
+      ))}
     </div>
 
     <section class="inprint__boxes" aria-labelledby="boxes-heading">
