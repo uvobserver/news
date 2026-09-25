@@ -26,7 +26,7 @@ export const BOX_PHOTOS: { src: string; caption: string; alt: string }[] = [
   { src: '/assets/boxes/dan-and-whits.jpg', caption: "Dan & Whit's, Norwich", alt: "Red UV Observer box outside Dan & Whit's in Norwich" },
   { src: '/assets/boxes/luckys-coffee-garage.jpg', caption: "Lucky's Coffee Garage, Lebanon", alt: "Red UV Observer box outside Lucky's Coffee Garage in Lebanon" },
   { src: '/assets/boxes/standard-company-tattoo.jpg', caption: 'Standard Company Tattoo, White River Jct.', alt: 'Red UV Observer box outside Standard Company Tattoo in White River Junction' },
-  { src: '/assets/boxes/57-main-street.jpg', caption: '57 Main Street, West Lebanon', alt: 'White UV Observer box by the fence at 57 Main Street in West Lebanon' },
+  { src: '/assets/boxes/57-main-street.jpg', caption: '57 Main Street, West Leb', alt: 'White UV Observer box by the fence at 57 Main Street in West Lebanon' },
 ];
 
 export type PrintEdition = {

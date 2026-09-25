@@ -19,18 +19,9 @@ const boxesByTown = Object.entries(
 <Base title="In Print" description="Where to find the red UV Observer boxes, and every past print edition." section="in-print">
   <div class="simplepage inprint">
     <div class="inprint__head">
-      <Kicker>The Print Edition</Kicker>
-      <Headline level="xl" as="h1">In Print</Headline>
+      <Kicker>The print edition</Kicker>
+      <Headline level="xl" as="h1">Occasionally Available In Print</Headline>
       <p class="inprint__intro">Periodic print editions of this peculiar periodical are distributed for free by Newsies to select Upper Valley locations. <a href="#host">Fill out this form</a> for the next delivery.</p>
-    </div>
-
-    <div class="boxphotos">
-      {BOX_PHOTOS.map(p => (
-        <figure class="boxphoto">
-          <img src={p.src} alt={p.alt} loading="lazy" decoding="async" />
-          <figcaption>{p.caption}</figcaption>
-        </figure>
-      ))}
     </div>
 
     <section class="inprint__boxes" aria-labelledby="boxes-heading">
@@ -57,6 +48,15 @@ const boxesByTown = Object.entries(
         )}
       </div>
     </section>
+
+    <div class="boxphotos">
+      {BOX_PHOTOS.map(p => (
+        <figure class="boxphoto">
+          <img src={p.src} alt={p.alt} loading="lazy" decoding="async" />
+          <figcaption>{p.caption}</figcaption>
+        </figure>
+      ))}
+    </div>
 
     <section class="inprint__editions" aria-labelledby="editions-heading">
       <h2 id="editions-heading" class="inprint__label">Past Print Editions</h2>
