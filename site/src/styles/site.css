@@ -285,7 +285,7 @@ button { font: inherit; color: inherit; }
 .cartpanel__empty { padding: 24px 20px; font-family: var(--font-body); color: var(--text-muted); margin: 0; }
 .cartlines { list-style: none; margin: 0; padding: 8px 20px; overflow-y: auto; flex: 1; }
 .cartline { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--hairline); }
-.cartline__img { width: 64px; height: 64px; object-fit: cover; flex: none; background: var(--surface-sunken); }
+.cartline__img { width: 64px; height: 64px; object-fit: cover; flex: none; background: var(--surface-page); }
 .cartline__info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
 .cartline__title { font-weight: 800; font-size: 14px; line-height: 1.25; color: var(--text-headline); }
 .cartline__variant, .cartline__price { font-size: 12px; color: var(--text-muted); }
@@ -300,12 +300,15 @@ button { font: inherit; color: inherit; }
 .cartpanel__checkout[aria-disabled="true"] { opacity: 0.6; pointer-events: none; }
 
 /* ---------- Product page ---------- */
+/* Product photos (often transparent PNG/WebP) sit on the page's white, not the sunken gray used for story art. */
+.shop__photo, .productRow__photo, .storyside__photo { background-color: var(--surface-page); }
+.placeholder.shop__photo, .placeholder.productRow__photo, .placeholder.storyside__photo, .pdp__main.placeholder, div.cartline__img { background: var(--surface-page); border: 1px solid var(--hairline); }
 .shop__link { display: flex; flex-direction: column; gap: 10px; }
 .shop__link:hover .shop__title, .storyside__link:hover .productTitle { color: var(--brand-secondary); }
 .storyside__link { display: flex; flex-direction: column; gap: 8px; }
 .pdp { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 40px; align-items: start; margin-top: 8px; }
 .pdp__gallery { display: flex; flex-direction: column; gap: 10px; }
-.pdp__main { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; display: block; background: var(--surface-sunken); }
+.pdp__main { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; display: block; background: var(--surface-page); }
 .pdp__thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 8px; }
 .pdp__thumb { padding: 0; border: 2px solid transparent; background: none; cursor: pointer; }
 .pdp__thumb img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; display: block; }
