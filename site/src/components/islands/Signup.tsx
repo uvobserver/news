@@ -12,7 +12,7 @@ export function Signup() {
   };
   return (
     <form className="nav__signup" action={SUBSTACK_SUBSCRIBE_ACTION} method="post" target="_blank" onSubmit={onSubmit}>
-      <input className="signup__input" id="signup-email" type="email" name="email" required placeholder="Your Email" aria-label="Your email" />
+      <input className="signup__input" id="signup-email" type="email" name="email" required placeholder="Enter email to..." aria-label="Enter email to subscribe" />
       <button className="signup__btn" type="submit">Subscribe</button>
     </form>
   );

@@ -93,7 +93,7 @@ button { font: inherit; color: inherit; }
 .signup__input {
   font-family: var(--font-display); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;
   padding: 7px 2px; border: none; border-bottom: 1px solid var(--hairline); background: transparent; border-radius: 0;
-  color: var(--brand-secondary); width: 140px; outline: none;
+  color: var(--brand-secondary); width: 165px; outline: none;
 }
 .signup__input:focus { border-bottom-color: var(--brand-secondary); }
 .signup__btn {
