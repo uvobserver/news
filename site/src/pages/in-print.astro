@@ -21,7 +21,7 @@ const boxesByTown = Object.entries(
     <div class="inprint__head">
       <Kicker>The Print Edition</Kicker>
       <Headline level="xl" as="h1">In Print</Headline>
-      <p class="inprint__intro">TK</p>
+      <p class="inprint__intro">Periodic print editions of this peculiar periodical are distributed for free by Newsies to select Upper Valley locations. <a href="#host">Fill out this form</a> for the next delivery.</p>
     </div>
 
     <section class="inprint__boxes" aria-labelledby="boxes-heading">
@@ -71,7 +71,6 @@ const boxesByTown = Object.entries(
     <section id="host" class="inprint__host" aria-labelledby="host-heading">
       <div class="inprint__hostcopy">
         <h2 id="host-heading" class="inprint__label">Host the Print Edition</h2>
-        <p>TK</p>
         <a class="ds-subscribe ds-subscribe--primary" href={HOST_FORM_URL} target="_blank" rel="noopener">Apply to Host a Box</a>
       </div>
       {hostFormEmbed && (
