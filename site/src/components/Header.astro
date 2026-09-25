@@ -2,6 +2,7 @@
 import { Rule } from '../ds';
 import { ArchivesMenu } from './islands/ArchivesMenu';
 import { Signup } from './islands/Signup';
+import { Cart } from './islands/Cart';
 import { url, type NavSection } from '../lib/urls';
 import { INSTAGRAM_URL, SUBSTACK_URL } from '../lib/links';
 
@@ -25,5 +26,8 @@ const chip = (on: boolean) => `navchip${on ? ' is-active' : ''}`;
     <a href={SUBSTACK_URL} target="_blank" rel="noopener">Substack</a>
     <a href={url.inPrint} class={section === 'in-print' ? 'is-active' : undefined} aria-current={section === 'in-print' ? 'page' : undefined}>In Print</a>
   </div>
-  <Signup client:idle />
+  <div class="nav__right">
+    <Cart client:idle />
+    <Signup client:idle />
+  </div>
 </nav>

@@ -38,10 +38,18 @@ forwarded to the new paths. Every page has a title, description, canonical URL a
   stories not on the homepage, Recycled Content picks a seasonal story; it updates when the site rebuilds).
 - Images live in `public/assets/`.
 
+## Shop (Shopify)
+- Products load from Shopify's Storefront API at build time (`src/data/shop.ts`); the cart runs in the
+  browser against the same API (`src/lib/cart.ts`) and hands off to Shopify checkout. Store domain and the
+  public Storefront token are in `src/lib/shopify.ts`.
+- Products must be published to the **Headless** sales channel. A Shopify collection with the handle
+  `featured` picks the two items in the Support UV Observer boxes; otherwise the two best sellers show.
+- If Shopify can't be reached at build time, the site falls back to the prototype's product list with links
+  to the old store. The build log says which it used (`[shop] Loaded N products from Shopify.`).
+- Product changes appear on the next build. To rebuild on every change, add a Cloudflare Pages deploy hook and
+  point a Shopify product-update webhook at it.
+
 ## Not wired yet
-- **Shop:** "Add to Cart" links to the current store (`STORE_URL` in `src/lib/links.ts`) until the Shopify
-  Storefront API cart is built.
 - **Newsletter:** the email form posts to Substack's embed endpoint in a new tab (`SUBSTACK_SUBSCRIBE_ACTION`);
   verify against the live publication.
 - **Instagram:** the three posts are static; there is no live feed.
-- **Placeholders:** the IN FOCUS story is still marked "Placeholder", and products 4–6 have no photos.

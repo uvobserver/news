@@ -7,11 +7,13 @@ import { Carousel } from '../components/islands/Carousel';
 import { BlotterPanel, ForumPanel } from '../components/islands/Panels';
 import { OldLinkRedirect } from '../components/islands/OldLinkRedirect';
 import {
-  ARCHIVE, TAG_SLUGS, LEAD_STORY, RECENT_STORIES, RECYCLED, FEATURED_PRODUCTS, MOST_READ, TOPIC_COLUMNS,
+  ARCHIVE, TAG_SLUGS, LEAD_STORY, RECENT_STORIES, RECYCLED, MOST_READ, TOPIC_COLUMNS,
   IN_DEPTH, CITY_LONGFORM, CITY_BRIEFS, IN_FOCUS, IG_POSTS, OPINION,
 } from '../data';
 import { url } from '../lib/urls';
+import { loadShop } from '../data/shop';
 
+const { featured } = await loadShop();
 const oldStoryLinks = Object.fromEntries(ARCHIVE.map(s => [s.id, url.story(s)]));
 const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].map(([t, slug]) => [t, `/archive/${slug}/`])]);
 ---
@@ -33,8 +35,8 @@ const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].
           <a class="moreLink" href={url.shop}>Visit Shop →</a>
         </div>
         <div style="margin-top:12px;display:flex;flex-direction:column;gap:14px;">
-          {FEATURED_PRODUCTS.map(p => (
-            <a class="plainlink productRow" href={url.shop}>
+          {featured.map(p => (
+            <a class="plainlink productRow" href={`${url.shop}#${p.handle}`}>
               <Photo className="productRow__photo" src={p.photo} />
               <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;">
                 <div class="productTitle">{p.title}</div>

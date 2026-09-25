@@ -2,22 +2,24 @@
 import Base from '../layouts/Base.astro';
 import { Headline } from '../ds';
 import { Photo } from '../components/Photo';
-import { PRODUCTS } from '../data';
-import { STORE_URL } from '../lib/links';
+import { AddToCart } from '../components/islands/AddToCart';
+import { loadShop } from '../data/shop';
+
+const { products } = await loadShop();
 ---
 <Base title="Shop" description="Print issues, stickers, and other analog proof you read a satirical newspaper." section="shop">
   <div class="simplepage">
     <Headline level="xl" as="h1">Shop</Headline>
     <div class="shop__intro">Print issues, stickers, and other analog proof you read a satirical newspaper. Fulfilled via Printful. Proceeds fund the next print run.</div>
     <div class="shop__grid">
-      {PRODUCTS.map(p => (
-        <div class="shop__item">
+      {products.map(p => (
+        <div class="shop__item" id={p.handle}>
           <Photo className="shop__photo" src={p.photo} />
           <div class="shop__title">{p.title}</div>
-          <div class="shop__desc">{p.desc}</div>
+          <div class="shop__desc">{p.description}</div>
           <div class="shop__buy">
             <span class="shop__price">{p.price}</span>
-            <a class="ds-subscribe ds-subscribe--secondary" href={STORE_URL} target="_blank" rel="noopener">Add to Cart</a>
+            <AddToCart client:visible variants={p.variants} idPrefix={`shop-${p.handle}`} />
           </div>
         </div>
       ))}

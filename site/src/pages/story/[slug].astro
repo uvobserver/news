@@ -4,16 +4,18 @@ import { Headline, Kicker } from '../../ds';
 import { Photo } from '../../components/Photo';
 import { RelatedArticles } from '../../components/islands/RelatedArticles';
 import { PrintButton } from '../../components/islands/PrintButton';
-import { ARCHIVE, FEATURED_PRODUCTS } from '../../data';
+import { ARCHIVE } from '../../data';
+import { loadShop } from '../../data/shop';
+import { AddToCart } from '../../components/islands/AddToCart';
 import type { Story } from '../../data/types';
 import { url } from '../../lib/urls';
-import { STORE_URL } from '../../lib/links';
 
 export function getStaticPaths() {
   return ARCHIVE.map(story => ({ params: { slug: story.slug }, props: { story } }));
 }
 
 const { story } = Astro.props as { story: Story };
+const { featured } = await loadShop();
 const shareUrl = new URL(url.story(story), Astro.site).href;
 const description = `${story.tag}. Unreal Coverage of the Upper Valley.`;
 ---
@@ -38,12 +40,12 @@ const description = `${story.tag}. Unreal Coverage of the Upper Valley.`;
 
       <aside class="storyside noprint">
         <Kicker>Support UV Observer</Kicker>
-        {FEATURED_PRODUCTS.map(p => (
+        {featured.map(p => (
           <div class="storyside__product">
             <Photo className="storyside__photo" src={p.photo} />
             <div class="productTitle">{p.title}</div>
             <div class="productPrice">{p.price}</div>
-            <a class="ds-subscribe ds-subscribe--secondary" href={STORE_URL} target="_blank" rel="noopener">Add To Cart</a>
+            <AddToCart client:visible variants={p.variants} label="Add To Cart" block idPrefix={`side-${p.handle}`} />
           </div>
         ))}
         <a class="sortbtn" href={url.shop} style="padding:6px 0 0;">Visit Shop →</a>

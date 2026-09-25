@@ -1,7 +1,7 @@
 // Derived collections for each page, mirroring the prototype's selection rules
 // so no headline appears twice on the homepage.
-import { ARCHIVE_RAW, IN_DEPTH, CITY_LONGFORM, CITY_BRIEFS, IN_FOCUS, PRODUCTS as PRODUCTS_RAW } from './content';
-import type { Story, Product } from './types';
+import { ARCHIVE_RAW, IN_DEPTH, CITY_LONGFORM, CITY_BRIEFS, IN_FOCUS } from './content';
+import type { Story } from './types';
 
 export { IN_DEPTH, CITY_LONGFORM, CITY_BRIEFS, IN_FOCUS, IG_POSTS, BLOTTER, FORUM, OPINION } from './content';
 
@@ -48,14 +48,6 @@ export const TAG_SLUGS = new Map(ARCHIVE_TAGS.filter(t => t !== 'All').map(t => 
 const HOME_STORIES = ARCHIVE.slice(0, 4);
 export const LEAD_STORY = HOME_STORIES[0];
 export const RECENT_STORIES = HOME_STORIES.slice(1, 4);
-
-const PRODUCT_PHOTOS: Record<string, string> = {
-  p1: '/assets/products/p1.webp',
-  p2: '/assets/products/p2.webp',
-  p3: '/assets/products/p3.webp',
-};
-export const PRODUCTS: Product[] = PRODUCTS_RAW.map(p => ({ ...p, photo: PRODUCT_PHOTOS[p.slotId] }));
-export const FEATURED_PRODUCTS = PRODUCTS.slice(0, 2);
 
 const SEASON_KEYWORDS: Record<number, string[]> = {
   1: ['snow', 'ice', 'winter', 'new year', 'resolution', 'plow', 'january', 'cold'],
