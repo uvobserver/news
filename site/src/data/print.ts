@@ -18,6 +18,7 @@ export const DISTRIBUTION_BOXES: DistributionBox[] = [
   { name: "Dan & Whit's", street: '319 Main Street', town: 'Norwich', state: 'VT', zip: '05055' },
   { name: "Lucky's Coffee Garage", street: '1 North Park Street', town: 'Lebanon', state: 'NH', zip: '03766' },
   { name: 'Standard Company Tattoo', street: '59 North Main Street', town: 'White River Junction', state: 'VT', zip: '05001' },
+  { name: '57 Main Street', street: '57 Main Street', town: 'West Lebanon', state: 'NH', zip: '03784' },
 ];
 
 /** Photos of boxes in the wild, shown as a strip under the In Print intro. */
@@ -25,7 +26,7 @@ export const BOX_PHOTOS: { src: string; caption: string; alt: string }[] = [
   { src: '/assets/boxes/dan-and-whits.jpg', caption: "Dan & Whit's, Norwich", alt: "Red UV Observer box outside Dan & Whit's in Norwich" },
   { src: '/assets/boxes/luckys-coffee-garage.jpg', caption: "Lucky's Coffee Garage, Lebanon", alt: "Red UV Observer box outside Lucky's Coffee Garage in Lebanon" },
   { src: '/assets/boxes/standard-company-tattoo.jpg', caption: 'Standard Company Tattoo, White River Jct.', alt: 'Red UV Observer box outside Standard Company Tattoo in White River Junction' },
-  { src: '/assets/boxes/57-main-street.jpg', caption: '57 Main Street', alt: 'White UV Observer box by the fence at 57 Main Street' },
+  { src: '/assets/boxes/57-main-street.jpg', caption: '57 Main Street, West Lebanon', alt: 'White UV Observer box by the fence at 57 Main Street in West Lebanon' },
 ];
 
 export type PrintEdition = {
