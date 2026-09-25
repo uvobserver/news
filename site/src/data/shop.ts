@@ -39,7 +39,7 @@ type ProductNode = {
 
 const PRODUCT_FIELDS = `
   handle title description availableForSale
-  featuredImage { url(transform: { maxWidth: 800 }) }
+  featuredImage { url(transform: { maxWidth: 800, maxHeight: 800, crop: CENTER }) }
   priceRange { minVariantPrice { amount currencyCode } maxVariantPrice { amount currencyCode } }
   variants(first: 50) { nodes { id title availableForSale price { amount currencyCode } } }
 `;

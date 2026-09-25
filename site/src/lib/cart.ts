@@ -20,7 +20,7 @@ const CART_FIELDS = `
   id checkoutUrl totalQuantity
   cost { subtotalAmount { amount currencyCode } }
   lines(first: 100) { nodes { id quantity merchandise { ... on ProductVariant {
-    title price { amount currencyCode } image { url(transform: { maxWidth: 160 }) }
+    title price { amount currencyCode } image { url(transform: { maxWidth: 160, maxHeight: 160, crop: CENTER }) }
     product { title }
   } } } }
 `;
