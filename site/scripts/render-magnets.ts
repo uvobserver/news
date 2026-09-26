@@ -20,6 +20,16 @@ const RENDERER = pathToFileURL(path.join(ROOT, 'scripts/magnet/render.html')).hr
 const FOCUS_DEFAULT = 0;
 const FOCUS: Record<string, number> = {};
 
+/**
+ * Story ids whose post image is a text-only graphic (no photo), found by measuring how much of the photo
+ * area is flat white or UVO red. Their magnets get a "Read More…" button in place of the photo.
+ */
+const READ_MORE = new Set([
+  77, 79, 80, 81, 82, 83, 85, 86, 87, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105,
+  106, 107, 108, 111, 115, 118, 119, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136,
+  137, 138, 139, 140, 155, 156, 159, 189, 217, 229, 268,
+].map(String));
+
 const args = process.argv.slice(2);
 const force = args.includes('--force');
 const only = new Set(args.filter(a => !a.startsWith('--')));
@@ -36,6 +46,7 @@ for (const s of todo) {
     date: s.date,
     photo: pathToFileURL(path.join(ROOT, 'public', s.photo)).href,
     focus: String(FOCUS[s.slug] ?? FOCUS_DEFAULT),
+    ...(READ_MORE.has(s.id) ? { readmore: '1' } : {}),
   });
   await page.goto(`${RENDERER}?${params}`);
   await page.waitForFunction(() => (window as unknown as { magnetReady?: boolean }).magnetReady === true, null, { timeout: 20_000 });
