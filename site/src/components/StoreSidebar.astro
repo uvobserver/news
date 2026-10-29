@@ -1,0 +1,23 @@
+---
+import { Kicker } from '../ds';
+import { Photo } from './Photo';
+import { AddToCart } from './islands/AddToCart';
+import { loadShop } from '../data/shop';
+import { url } from '../lib/urls';
+
+const { featured, live } = await loadShop();
+---
+<aside class="storyside noprint">
+  <Kicker>Support UV Observer</Kicker>
+  {featured.map(p => (
+    <div class="storyside__product">
+      <a class="plainlink storyside__link" href={live ? url.product(p.handle) : `${url.shop}#${p.handle}`}>
+        <Photo className="storyside__photo" src={p.photo} />
+        <div class="productTitle">{p.title}</div>
+      </a>
+      <div class="productPrice">{p.price}</div>
+      <AddToCart client:visible variants={p.variants} label="Add To Cart" block idPrefix={`side-${p.handle}`} />
+    </div>
+  ))}
+  <a class="sortbtn" href={url.shop} style="padding:6px 0 0;">Visit Shop →</a>
+</aside>

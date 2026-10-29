@@ -1,0 +1,10 @@
+---
+import ArchivePage from '../../components/ArchivePage.astro';
+import { TAG_SLUGS } from '../../data';
+
+export function getStaticPaths() {
+  return [...TAG_SLUGS].map(([tag, slug]) => ({ params: { tag: slug }, props: { tag } }));
+}
+const { tag } = Astro.props as { tag: string };
+---
+<ArchivePage tag={tag} />

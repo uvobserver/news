@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+import { Headline } from '../ds';
+import { url } from '../lib/urls';
+---
+<Base title="Page Not Found" section="story">
+  <div class="simplepage">
+    <Headline level="xl" as="h1">Page Not Found</Headline>
+    <p class="about__intro">That page isn't here. It may have moved when the site did. <a href={url.archive()}>Browse the archive</a> or <a href={url.home}>go to the front page</a>.</p>
+  </div>
+</Base>

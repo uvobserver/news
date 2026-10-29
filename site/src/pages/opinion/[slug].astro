@@ -1,0 +1,54 @@
+---
+import Base from '../../layouts/Base.astro';
+import { Headline, Kicker } from '../../ds';
+import StoreSidebar from '../../components/StoreSidebar.astro';
+import { PrintButton } from '../../components/islands/PrintButton';
+import { OPINION_PIECES, type OpinionPiece } from '../../data/opinion';
+import { url } from '../../lib/urls';
+
+export function getStaticPaths() {
+  return OPINION_PIECES.map(piece => ({ params: { slug: piece.slug }, props: { piece } }));
+}
+
+const { piece } = Astro.props as { piece: OpinionPiece };
+const shareUrl = new URL(url.opinion(piece.slug), Astro.site).href;
+const others = OPINION_PIECES.filter(p => p.slug !== piece.slug);
+---
+<Base title={piece.title} description={piece.dek} section="story" ogType="article">
+  <Fragment slot="head">
+    <meta property="article:section" content="Opinion" />
+  </Fragment>
+  <div class="storypage">
+    <a class="backlink noprint" href={url.home}>← Back to Front Page</a>
+    <div class="storygrid">
+      <article class="storymain opinionpage">
+        <Kicker>Opinion · {piece.kicker}</Kicker>
+        <Headline level="xl" as="h1">{piece.headline}</Headline>
+        <div class="opinionpage__byline">{piece.byline}</div>
+        <div class="opinionpage__body">
+          {piece.paragraphs.map(p => <p set:html={p} />)}
+        </div>
+        <div class="opinionpage__source">
+          From the <a href={piece.edition.pdf} target="_blank" rel="noopener">{piece.edition.label}</a>, page {piece.edition.page}.
+        </div>
+        <div class="share noprint">
+          <span class="share__label">Share</span>
+          <span class="share__url">{shareUrl.replace(/^https?:\/\//, '')}</span>
+          <PrintButton client:visible />
+        </div>
+        {others.length > 0 && (
+          <div class="opinionpage__more noprint">
+            <Kicker>More Opinion</Kicker>
+            {others.map(o => (
+              <a class="plainlink opinionpage__morelink" href={url.opinion(o.slug)}>
+                <div class="opinion__kicker">{o.kicker}</div>
+                <Headline level="sm">{o.title}</Headline>
+              </a>
+            ))}
+          </div>
+        )}
+      </article>
+      <StoreSidebar />
+    </div>
+  </div>
+</Base>

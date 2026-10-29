@@ -1,0 +1,178 @@
+---
+import Base from '../layouts/Base.astro';
+import { Headline, Kicker } from '../ds';
+import { Photo } from '../components/Photo';
+import { StoryText, FeatureCard, MaybeLink } from '../components/StoryBlocks';
+import { Carousel } from '../components/islands/Carousel';
+import { BlotterPanel, ForumPanel } from '../components/islands/Panels';
+import { OldLinkRedirect } from '../components/islands/OldLinkRedirect';
+import {
+  ARCHIVE, TAG_SLUGS, LEAD_STORY, RECENT_STORIES, RECYCLED, MOST_READ, TOPIC_COLUMNS,
+  IN_DEPTH, CITY_LONGFORM, CITY_BRIEFS, IN_FOCUS, IG_TILES,
+} from '../data';
+import { url } from '../lib/urls';
+import { loadShop } from '../data/shop';
+import { INSTAGRAM_URL } from '../lib/links';
+import { OPINION_PIECES } from '../data/opinion';
+
+const { featured, live: shopLive } = await loadShop();
+// Match In Focus related items to their story pages (titles differ only in quote marks).
+const norm = (t: string) => t.toLowerCase().replace(/[^a-z0-9]/g, '');
+const storyByTitle = (t: string) => ARCHIVE.find(s => norm(s.title) === norm(t));
+const oldStoryLinks = Object.fromEntries(ARCHIVE.map(s => [s.id, url.story(s)]));
+const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].map(([t, slug]) => [t, `/archive/${slug}/`])]);
+---
+<Base section="home">
+  <OldLinkRedirect client:load stories={oldStoryLinks} tags={oldTagLinks} />
+  <div class="home">
+    {/* Above the fold: lead story | Recycled Content + Support */}
+    <a class="plainlink lead" href={url.story(LEAD_STORY)}>
+      <Photo className="lead__photo" src={LEAD_STORY.photo} />
+      <div class="lead__body">
+        <StoryText story={LEAD_STORY} level="xl" />
+      </div>
+    </a>
+
+    <div>
+      <div>
+        <div class="modhead">
+          <Kicker color="secondary">Support UV Observer</Kicker>
+          <a class="moreLink" href={url.shop}>Visit Shop →</a>
+        </div>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:14px;">
+          {featured.map(p => (
+            <a class="plainlink productRow" href={shopLive ? url.product(p.handle) : `${url.shop}#${p.handle}`}>
+              <Photo className="productRow__photo" src={p.photo} />
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;">
+                <div class="productTitle">{p.title}</div>
+                <div class="productPrice">{p.price}</div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+      <a class="plainlink panel panel--recycled" href={url.story(RECYCLED)}>
+        <div class="panel__head">
+          <span class="panel__label"><span class="recycled__icon" aria-hidden="true">♻</span> Recycled Content</span>
+        </div>
+        <div class="panel__body">
+          <div class="recycled__tag">{RECYCLED.tag}</div>
+          <div class="recycled__title">{RECYCLED.title}</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="fullrow divider"><div></div></div>
+
+    <div class="recent">
+      {RECENT_STORIES.map(s => (
+        <a class="plainlink recent__item" href={url.story(s)}>
+          <Photo src={s.photo} width="220px" ar={s.ar} />
+          <StoryText story={s} level="lg" />
+        </a>
+      ))}
+    </div>
+
+    <div class="sidecol">
+      <Kicker>Most Read</Kicker>
+      <div class="thumbList">
+        {MOST_READ.map(s => (
+          <a class="plainlink thumbRow" href={url.story(s)}>
+            <Photo src={s.photo} width="110px" ar={s.ar} />
+            <Headline level="md">{s.title}</Headline>
+          </a>
+        ))}
+      </div>
+      <div style="margin-top:32px;">
+        <Kicker>Follow @uvobserver</Kicker>
+        <div class="igGrid">
+          {IG_TILES.map(s => (
+            <a href={INSTAGRAM_URL} target="_blank" rel="noopener" aria-label={`${s.title} — on Instagram`} style={`background-image:url("${s.photo}")`}></a>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <Carousel client:visible title="In-Depth">
+      {IN_DEPTH.map(d => <FeatureCard item={d} />)}
+    </Carousel>
+
+    <div class="sidestack">
+      <BlotterPanel client:visible />
+      <ForumPanel client:visible />
+    </div>
+
+    <section class="infocus" aria-label={`In Focus: ${IN_FOCUS.topic}`}>
+      <div class="shell">
+        <div class="infocus__label">In Focus: {IN_FOCUS.topic}</div>
+        <div class="infocus__grid">
+          <div class="infocus__lead">
+            <Photo className="infocus__photo" src={IN_FOCUS.photo} />
+            <div class="infocus__text">
+              <h2 class="infocus__headline">{IN_FOCUS.headline}</h2>
+              {IN_FOCUS.dek && <div class="infocus__dek">{IN_FOCUS.dek}</div>}
+            </div>
+          </div>
+          <div class="infocus__related">
+            <div class="infocus__relatedLabel">Related Coverage</div>
+            <div class="infocus__list">
+              {IN_FOCUS.related.map(r => {
+                const story = storyByTitle(r.title);
+                const Tag = story ? 'a' : 'div';
+                return (
+                  <Tag class="plainlink infocus__item" href={story ? url.story(story) : undefined}>
+                    <Photo src={r.photo} width="96px" ar={r.ar} />
+                    <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;">
+                      <div class="infocus__itemTitle">{r.title}</div>
+                    </div>
+                  </Tag>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <Carousel client:visible title="City News">
+      {CITY_LONGFORM.map(d => <FeatureCard item={d} />)}
+      {CITY_BRIEFS.map(b => (
+        <MaybeLink className="brief" link={b.link}>
+          <div class="brief__label">News In Brief</div>
+          <Headline level="sm">{b.title}</Headline>
+        </MaybeLink>
+      ))}
+    </Carousel>
+
+    <section class="opinion" aria-label="Opinion">
+      <Kicker>Opinion</Kicker>
+      {OPINION_PIECES.map(o => (
+        <a class="plainlink opinion__item" href={url.opinion(o.slug)}>
+          <div class="opinion__kicker">{o.kicker}</div>
+          <Headline level="sm">{o.title}</Headline>
+          <div class="opinion__byline">{o.byline}</div>
+          <div class="opinion__dek">{o.dek}</div>
+          <span class="opinion__more">Read the column →</span>
+        </a>
+      ))}
+    </section>
+
+    <div class="topics">
+      {TOPIC_COLUMNS.map(c => (
+        <section aria-label={c.tag}>
+          <Kicker color={c.kickerColor}>{c.tag}</Kicker>
+          <div class="thumbList">
+            {c.items.map(s => (
+              <a class="plainlink thumbRow" href={url.story(s)}>
+                <Photo src={s.photo} width="92px" ar={s.ar} />
+                <div class="thumbRow__text">
+                  <Headline level="sm">{s.title}</Headline>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+</Base>

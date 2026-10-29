@@ -1,0 +1,62 @@
+---
+import '../styles/tokens.css';
+import '../styles/site.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { Ticker } from '../components/islands/Ticker';
+import type { NavSection } from '../lib/urls';
+
+interface Props {
+  /** Page name; " — The UV Observer" is appended except on the home page. */
+  title?: string;
+  description?: string;
+  /** Social preview image, site-relative (e.g. a story photo). */
+  image?: string;
+  section: NavSection;
+  activeTag?: string;
+  ogType?: 'website' | 'article';
+}
+
+const SITE_NAME = 'The UV Observer';
+const TAGLINE = 'Unreal Coverage of the Upper Valley. Published Occasionally.';
+const { title, description = TAGLINE, image = '/assets/logo-with-subhead.png', section, activeTag, ogType = 'website' } = Astro.props;
+const fullTitle = title ? `${title} — ${SITE_NAME}` : SITE_NAME;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(image, Astro.site);
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <link rel="alternate" type="application/rss+xml" title="The UV Observer on Substack" href="https://uvobserver.substack.com/feed" />
+  <meta property="og:site_name" content={SITE_NAME} />
+  <meta property="og:type" content={ogType} />
+  <meta property="og:title" content={title ?? SITE_NAME} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@600;700;800;900&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" />
+  <slot name="head" />
+</head>
+<body>
+  <div class="page">
+    <Ticker client:idle />
+    <div class="shell">
+      <Header section={section} activeTag={activeTag} />
+      <main>
+        <slot />
+      </main>
+      <Footer />
+    </div>
+  </div>
+</body>
+</html>

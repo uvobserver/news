@@ -1,0 +1,47 @@
+---
+import Base from '../../layouts/Base.astro';
+import { Headline, Kicker } from '../../ds';
+import { ProductDetail } from '../../components/islands/ProductDetail';
+import { loadShop, type ShopProduct } from '../../data/shop';
+import { url } from '../../lib/urls';
+
+export async function getStaticPaths() {
+  const { products, live } = await loadShop();
+  // Fallback products have no Shopify data, so they get no pages; the Shop grid shows them without links.
+  return live ? products.map(product => ({ params: { handle: product.handle }, props: { product } })) : [];
+}
+
+const { product } = Astro.props as { product: ShopProduct };
+const metaDescription = (product.seoDescription || product.description || `${product.title} from The UV Observer shop.`).slice(0, 300);
+const pageUrl = new URL(url.product(product.handle), Astro.site).href;
+// schema.org Product data so search engines can show price and availability.
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: product.title,
+  description: product.description,
+  image: product.images.map(i => i.src),
+  url: pageUrl,
+  brand: { '@type': 'Brand', name: 'The UV Observer' },
+  offers: {
+    '@type': 'Offer',
+    url: pageUrl,
+    price: product.priceAmount,
+    priceCurrency: product.currency,
+    availability: `https://schema.org/${product.available ? 'InStock' : 'OutOfStock'}`,
+  },
+}).replace(/</g, '\\u003c');
+---
+<Base title={product.seoTitle || product.title} description={metaDescription} image={product.photo} section="shop" ogType="website">
+  <script slot="head" type="application/ld+json" set:html={jsonLd} />
+  <div class="simplepage product">
+    <a class="backlink" href={url.shop}>← All Products</a>
+    <ProductDetail client:load product={product}>
+      <div class="product__head">
+        <Kicker>Support UV Observer</Kicker>
+        <Headline level="xl" as="h1">{product.title}</Headline>
+      </div>
+      <div slot="details" class="product__desc" set:html={product.descriptionHtml || product.description} />
+    </ProductDetail>
+  </div>
+</Base>
