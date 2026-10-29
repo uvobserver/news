@@ -1,9 +1,15 @@
 // Derived collections for each page, mirroring the prototype's selection rules
 // so no headline appears twice on the homepage.
-import { ARCHIVE_RAW, IN_DEPTH, CITY_LONGFORM, CITY_BRIEFS, IN_FOCUS } from './content';
+import { ARCHIVE_RAW, IN_DEPTH, CITY_LONGFORM, CITY_BRIEFS, IN_FOCUS as IN_FOCUS_RAW } from './content';
 import type { Story } from './types';
 
-export { IN_DEPTH, CITY_LONGFORM, CITY_BRIEFS, IN_FOCUS, IG_POSTS, BLOTTER, FORUM, OPINION } from './content';
+export { IN_DEPTH, CITY_LONGFORM, CITY_BRIEFS, BLOTTER, FORUM, OPINION } from './content';
+
+/**
+ * In Focus: the new West Leb bridge by the old sex shop. The prototype's summary line and date were
+ * placeholders written by the design tool, so they're left out until there's real copy.
+ */
+export const IN_FOCUS = { ...IN_FOCUS_RAW, dek: '', date: '' };
 
 export function formatDate(iso: string): string {
   return new Date(iso + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
@@ -109,6 +115,12 @@ const ON_HOME = new Set([...USED_TITLES, ...TOPIC_COLUMNS.flatMap(c => c.items.m
 
 /** Stories not shown anywhere on the homepage; the Microfiche ticker draws from these. */
 export const DEEP_CUTS = ARCHIVE.filter(s => !ON_HOME.has(s.title));
+
+/**
+ * "Follow @uvobserver" tiles: the newest posts not already on the homepage (every story is an Instagram
+ * post), using the site's own copies of the images so nothing depends on Squarespace's image servers.
+ */
+export const IG_TILES = DEEP_CUTS.slice(0, 3);
 
 export function shuffled<T>(list: readonly T[]): T[] {
   const a = list.slice();

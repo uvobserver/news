@@ -8,13 +8,17 @@ import { BlotterPanel, ForumPanel } from '../components/islands/Panels';
 import { OldLinkRedirect } from '../components/islands/OldLinkRedirect';
 import {
   ARCHIVE, TAG_SLUGS, LEAD_STORY, RECENT_STORIES, RECYCLED, MOST_READ, TOPIC_COLUMNS,
-  IN_DEPTH, CITY_LONGFORM, CITY_BRIEFS, IN_FOCUS, IG_POSTS,
+  IN_DEPTH, CITY_LONGFORM, CITY_BRIEFS, IN_FOCUS, IG_TILES,
 } from '../data';
 import { url } from '../lib/urls';
 import { loadShop } from '../data/shop';
+import { INSTAGRAM_URL } from '../lib/links';
 import { OPINION_PIECES } from '../data/opinion';
 
 const { featured, live: shopLive } = await loadShop();
+// Match In Focus related items to their story pages (titles differ only in quote marks).
+const norm = (t: string) => t.toLowerCase().replace(/[^a-z0-9]/g, '');
+const storyByTitle = (t: string) => ARCHIVE.find(s => norm(s.title) === norm(t));
 const oldStoryLinks = Object.fromEntries(ARCHIVE.map(s => [s.id, url.story(s)]));
 const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].map(([t, slug]) => [t, `/archive/${slug}/`])]);
 ---
@@ -82,8 +86,8 @@ const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].
       <div style="margin-top:32px;">
         <Kicker>Follow @uvobserver</Kicker>
         <div class="igGrid">
-          {IG_POSTS.slice(0, 3).map(p => (
-            <a href={p.link} target="_blank" rel="noopener" aria-label="Instagram post" style={`background-image:url("${p.image}")`}></a>
+          {IG_TILES.map(s => (
+            <a href={INSTAGRAM_URL} target="_blank" rel="noopener" aria-label={`${s.title} — on Instagram`} style={`background-image:url("${s.photo}")`}></a>
           ))}
         </div>
       </div>
@@ -106,20 +110,24 @@ const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].
             <Photo className="infocus__photo" src={IN_FOCUS.photo} />
             <div class="infocus__text">
               <h2 class="infocus__headline">{IN_FOCUS.headline}</h2>
-              <div class="infocus__dek">{IN_FOCUS.dek}</div>
+              {IN_FOCUS.dek && <div class="infocus__dek">{IN_FOCUS.dek}</div>}
             </div>
           </div>
           <div class="infocus__related">
             <div class="infocus__relatedLabel">Related Coverage</div>
             <div class="infocus__list">
-              {IN_FOCUS.related.map(r => (
-                <div class="infocus__item">
-                  <Photo src={r.photo} width="96px" ar={r.ar} />
-                  <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;">
-                    <div class="infocus__itemTitle">{r.title}</div>
-                  </div>
-                </div>
-              ))}
+              {IN_FOCUS.related.map(r => {
+                const story = storyByTitle(r.title);
+                const Tag = story ? 'a' : 'div';
+                return (
+                  <Tag class="plainlink infocus__item" href={story ? url.story(story) : undefined}>
+                    <Photo src={r.photo} width="96px" ar={r.ar} />
+                    <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;">
+                      <div class="infocus__itemTitle">{r.title}</div>
+                    </div>
+                  </Tag>
+                );
+              })}
             </div>
           </div>
         </div>

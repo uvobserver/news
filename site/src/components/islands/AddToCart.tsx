@@ -15,7 +15,7 @@ export function AddToCart({ variants, label = 'Add to Cart', block, idPrefix, on
   const { busy } = useSyncExternalStore(cartStore.subscribe, cartStore.get, cartStore.get);
   const btn = `ds-subscribe ds-subscribe--secondary addtocart__btn${block ? ' addtocart__btn--block' : ''}`;
 
-  if (!variants.length) return <a className={btn} href={STORE_URL} target="_blank" rel="noopener">{label}</a>;
+  if (!variants.length) return <a className={btn} href={STORE_URL}>{label}</a>;
 
   const chosen = variants.find(v => v.id === variantId);
   const soldOut = !chosen?.available;
