@@ -1,0 +1,57 @@
+# Adds posts from the Canva "UVO Website" folder to the site (see site/scripts/publish-from-canva.md).
+# Started by the daily publishing task with a JSON list of posts; downloads each Canva export, runs
+# `npm run add-post`, checks the build, and commits to main, which Cloudflare then publishes.
+name: Add posts from Canva
+
+on:
+  workflow_dispatch:
+    inputs:
+      posts:
+        description: 'JSON array of {"image": "<Canva export URL>", "canva": "<design id>", "title": "...", "tag": "...", "date": "YYYY-MM-DD"}'
+        required: true
+
+permissions:
+  contents: write
+
+concurrency: add-posts
+
+jobs:
+  add:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - run: npm ci
+      - name: Add posts
+        env:
+          POSTS: ${{ inputs.posts }}
+        run: |
+          echo "$POSTS" > "$RUNNER_TEMP/posts.json"
+          node -e '
+            const posts = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"));
+            for (const p of posts) {
+              if (!String(p.image).startsWith("https://export-download.canva.com/")) throw new Error("Not a Canva export URL: " + p.image);
+              console.log([p.image, p.canva, p.title, p.tag, p.date].join("\t"));
+            }' "$RUNNER_TEMP/posts.json" > "$RUNNER_TEMP/posts.tsv"
+          while IFS=$'\t' read -r image canva title tag date; do
+            curl -fsSL -o "$RUNNER_TEMP/$canva.jpg" "$image"
+            npm run -s add-post -- --image "$RUNNER_TEMP/$canva.jpg" --canva "$canva" --title "$title" --tag "$tag" --date "$date"
+          done < "$RUNNER_TEMP/posts.tsv"
+      - run: npm run build
+      - name: Commit
+        run: |
+          git add -A src/data/posts.json public/assets/uvo
+          if git diff --cached --quiet; then echo "Nothing new."; exit 0; fi
+          git config user.name "UVO publishing"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "Add posts from Canva: $(node -p 'require("./src/data/posts.json").slice(-'"$(git diff --cached --name-only public/assets/uvo/full | wc -l)"').map(p => p.title).join("; ")')"
+          git push
