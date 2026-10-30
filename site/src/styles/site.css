@@ -115,7 +115,7 @@ button { font: inherit; color: inherit; }
 .fullrow { grid-column: 1 / -1; }
 
 .lead { display: flex; gap: 24px; align-items: flex-start; }
-.lead__photo { width: 46%; align-self: stretch; min-height: 300px; }
+.lead__photo { width: 46%; }
 .lead__body { flex: 1; min-width: 0; }
 .storytext { display: flex; flex-direction: column; gap: 8px; padding-bottom: 20px; }
 
@@ -406,7 +406,8 @@ a.infocus__item:hover .infocus__itemTitle { text-decoration: underline; }
 }
 @media (max-width: 560px) {
   .lead, .recent__item, .infocus__lead { flex-direction: column; }
-  .lead__photo, .infocus__photo { width: 100%; min-height: 0; aspect-ratio: 1; height: auto; }
+  .lead__photo { width: 100%; }
+  .infocus__photo { width: 100%; min-height: 0; aspect-ratio: 1; height: auto; }
   .recent__item .photo { width: 100% !important; }
   .footer { flex-direction: column; align-items: flex-start; }
 }

@@ -27,7 +27,7 @@ const oldTagLinks = Object.fromEntries([['All', '/archive/'], ...[...TAG_SLUGS].
   <div class="home">
     {/* Above the fold: lead story | Recycled Content + Support */}
     <a class="plainlink lead" href={url.story(LEAD_STORY)}>
-      <Photo className="lead__photo" src={LEAD_STORY.photo} />
+      <Photo className="lead__photo" src={LEAD_STORY.photo} ar={LEAD_STORY.ar} />
       <div class="lead__body">
         <StoryText story={LEAD_STORY} level="xl" />
       </div>
