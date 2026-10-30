@@ -8,7 +8,8 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "extract-data": "node scripts/extract-data.mjs",
-    "magnets": "tsx scripts/render-magnets.ts"
+    "magnets": "tsx scripts/render-magnets.ts",
+    "add-post": "tsx scripts/add-post.ts"
   },
   "dependencies": {
     "@astrojs/react": "^7.0.0",
@@ -25,6 +26,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "playwright": "^1.56.1",
+    "sharp": "^0.35.4",
     "tsx": "^4.23.15",
     "typescript": "^5.9.3"
   }

@@ -8,6 +8,8 @@ export type RawStory = {
   /** Aspect ratio (w/h) of `photo`. */
   ar: number;
   dek?: string;
+  /** Canva design id, for posts added from the "UVO Website" Canva folder (never on Squarespace). */
+  canva?: string;
 };
 
 export type KickerColor = 'primary' | 'secondary';

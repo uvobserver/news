@@ -1,7 +1,11 @@
 // Derived collections for each page, mirroring the prototype's selection rules
 // so no headline appears twice on the homepage.
 import { ARCHIVE_RAW, IN_DEPTH, CITY_LONGFORM, CITY_BRIEFS, IN_FOCUS as IN_FOCUS_RAW } from './content';
-import type { Story } from './types';
+import POSTS from './posts.json';
+import type { RawStory, Story } from './types';
+
+/** Squarespace-era stories, then posts added since from Canva (scripts/add-post.ts). */
+const ALL_RAW: RawStory[] = [...ARCHIVE_RAW, ...POSTS];
 
 export { IN_DEPTH, CITY_LONGFORM, CITY_BRIEFS, BLOTTER, FORUM, OPINION } from './content';
 
@@ -33,7 +37,7 @@ export function slugify(text: string, max = 80): string {
 const SLUGS = new Map<string, string>();
 {
   const seen = new Map<string, number>();
-  for (const s of ARCHIVE_RAW) {
+  for (const s of ALL_RAW) {
     const base = slugify(s.title);
     const n = (seen.get(base) ?? 0) + 1;
     seen.set(base, n);
@@ -42,7 +46,7 @@ const SLUGS = new Map<string, string>();
 }
 
 /** Every story, newest first. Kicker colors alternate by original catalog order. */
-export const ARCHIVE: Story[] = ARCHIVE_RAW
+export const ARCHIVE: Story[] = ALL_RAW
   .map((s, i): Story => ({ ...s, kickerColor: i % 2 === 0 ? 'primary' : 'secondary', displayDate: formatDate(s.date), slug: SLUGS.get(s.id)! }))
   .sort((a, b) => b.date.localeCompare(a.date));
 

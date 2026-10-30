@@ -11,7 +11,7 @@ export const getStaticPaths = () => [{ params: { redirects: '_redirects' } }];
 export const GET: APIRoute = () => {
   const lines = [
     '# Old Squarespace story posts',
-    ...ARCHIVE.map(s => `/news/${20000 + Number(s.id)} ${url.story(s)} 301`),
+    ...ARCHIVE.filter(s => !s.canva).map(s => `/news/${20000 + Number(s.id)} ${url.story(s)} 301`),
     '',
     '# Old Squarespace sections and store',
     ...[...TAG_SLUGS].map(([, slug]) => `/news/category/${slug} /archive/${slug}/ 301`),
